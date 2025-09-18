@@ -1,0 +1,400 @@
+{
+  "activeClients": [
+    {
+      "id": "b1b05f2c-7a01-41fe-a9b2-13e7b22546ac",
+      "role": "planner",
+      "name": "Claude-Planner",
+      "connectedAt": "2025-09-18T11:16:23.977Z",
+      "capabilities": []
+    },
+    {
+      "id": "4406ec28-30bb-468f-95d4-4c57c0219aea",
+      "role": "executor",
+      "name": "Codex-Executor",
+      "connectedAt": "2025-09-18T11:18:06.679Z",
+      "capabilities": []
+    }
+  ],
+  "activeTasks": [
+    {
+      "id": "123bf445-3a04-4104-b34f-b3cdcc5164f5",
+      "description": "Create a simple Python calculator with basic operations",
+      "requirements": [
+        "Support addition, subtraction, multiplication, division",
+        "Include input validation",
+        "Add error handling for division by zero",
+        "Create a simple CLI interface"
+      ],
+      "status": "executing",
+      "createdAt": "2025-09-18T09:40:58.421Z",
+      "updatedAt": "2025-09-18T09:41:04.077Z",
+      "createdBy": "user",
+      "assignedTo": "0de8097b-cc9c-4c5d-9d96-d27fe089af10"
+    },
+    {
+      "id": "91fd0dbb-be5c-4137-ade5-d719780c9479",
+      "description": "Test Task: Create a hello world program in Python",
+      "requirements": [
+        "Print 'Hello World'",
+        "Add a timestamp",
+        "Save output to a file"
+      ],
+      "status": "pending",
+      "createdAt": "2025-09-18T09:51:55.577Z",
+      "updatedAt": "2025-09-18T09:51:55.577Z",
+      "createdBy": "user"
+    },
+    {
+      "id": "b04a8d79-12c5-4f72-b676-d4aa12f58e46",
+      "description": "Create a simple hello world Python script",
+      "requirements": [
+        "Create a file named hello.py",
+        "Add a function that prints 'Hello, World!'",
+        "Add a main block to call the function"
+      ],
+      "status": "completed",
+      "createdAt": "2025-09-18T10:01:26.253Z",
+      "updatedAt": "2025-09-18T10:02:18.843Z",
+      "createdBy": "user",
+      "assignedTo": "6abc6ca0-26df-4e68-a141-06521917a3e8"
+    },
+    {
+      "id": "da4a173e-71fb-4003-9f4f-aec974c048d8",
+      "description": "Build a simple REST API",
+      "requirements": [
+        "Use Express.js",
+        "Add authentication",
+        "Include CRUD operations"
+      ],
+      "status": "executing",
+      "createdAt": "2025-09-18T09:10:55.470Z",
+      "updatedAt": "2025-09-18T09:11:50.325Z",
+      "createdBy": "user",
+      "assignedTo": "63e49cad-a8df-4dc3-9bcd-34b50f6af739"
+    },
+    {
+      "id": "1cd2f1b2-1130-47d2-b8ed-88b7268c49e9",
+      "description": "Create a simple Python calculator script",
+      "requirements": [
+        "Create calculator.py file",
+        "Add basic math operations (add, subtract, multiply, divide)",
+        "Include a main function to test operations"
+      ],
+      "status": "executing",
+      "createdAt": "2025-09-18T11:19:01.637Z",
+      "updatedAt": "2025-09-18T11:19:13.033Z",
+      "createdBy": "user",
+      "assignedTo": "b1b05f2c-7a01-41fe-a9b2-13e7b22546ac"
+    }
+  ],
+  "activePlans": [
+    {
+      "id": "4ff70e80-5998-4992-bed6-a207a0872bbb",
+      "taskId": "b04a8d79-12c5-4f72-b676-d4aa12f58e46",
+      "plannerId": "6abc6ca0-26df-4e68-a141-06521917a3e8",
+      "steps": [
+        {
+          "id": "e5c0e909-1f1b-4616-809c-edd3fba7a3f1",
+          "description": "Create the Python file hello.py",
+          "dependencies": [],
+          "status": "completed",
+          "order": 1,
+          "assignedExecutor": "3387ea1d-c4e2-45b7-9d52-945f9dd0f4c1"
+        },
+        {
+          "id": "affef50b-33b3-481a-b40f-8854a54cd4e7",
+          "description": "Write the hello_world function that prints 'Hello, World!'",
+          "dependencies": [
+            "step-0"
+          ],
+          "status": "completed",
+          "order": 2,
+          "assignedExecutor": "3387ea1d-c4e2-45b7-9d52-945f9dd0f4c1"
+        },
+        {
+          "id": "debd039c-f2fc-4d3c-83b1-f6d5c96e17c6",
+          "description": "Add the main block to call the function",
+          "dependencies": [
+            "step-1"
+          ],
+          "status": "completed",
+          "order": 3,
+          "assignedExecutor": "3387ea1d-c4e2-45b7-9d52-945f9dd0f4c1"
+        },
+        {
+          "id": "c14712fb-1691-44ce-8989-d2bce37fe95e",
+          "description": "Test the script by running it",
+          "dependencies": [
+            "step-2"
+          ],
+          "status": "completed",
+          "order": 4,
+          "assignedExecutor": "3387ea1d-c4e2-45b7-9d52-945f9dd0f4c1"
+        }
+      ],
+      "executorAssignments": {
+        "3387ea1d-c4e2-45b7-9d52-945f9dd0f4c1": [
+          "e5c0e909-1f1b-4616-809c-edd3fba7a3f1",
+          "affef50b-33b3-481a-b40f-8854a54cd4e7",
+          "debd039c-f2fc-4d3c-83b1-f6d5c96e17c6",
+          "c14712fb-1691-44ce-8989-d2bce37fe95e"
+        ]
+      },
+      "status": "completed",
+      "createdAt": "2025-09-18T10:01:38.041Z",
+      "updatedAt": "2025-09-18T10:01:44.445Z"
+    },
+    {
+      "id": "713605e3-b981-4ee7-98d6-deed24b3b32a",
+      "taskId": "da4a173e-71fb-4003-9f4f-aec974c048d8",
+      "plannerId": "63e49cad-a8df-4dc3-9bcd-34b50f6af739",
+      "steps": [
+        {
+          "id": "8e72b88f-db43-4be8-9078-e1fef7fc7e79",
+          "description": "Setup Express.js project",
+          "dependencies": [],
+          "status": "completed",
+          "order": 1,
+          "assignedExecutor": "7ca7923a-72e7-42dd-a4d8-d145df8eb5c3"
+        },
+        {
+          "id": "5b4f5766-814c-4f1d-89d6-56a72fbdead6",
+          "description": "Implement authentication middleware",
+          "dependencies": [],
+          "status": "in_progress",
+          "order": 2,
+          "assignedExecutor": "7ca7923a-72e7-42dd-a4d8-d145df8eb5c3"
+        },
+        {
+          "id": "b5c4a26e-1836-44bc-a207-3d5796968ab1",
+          "description": "Create user model",
+          "dependencies": [],
+          "status": "in_progress",
+          "order": 3,
+          "assignedExecutor": "7ca7923a-72e7-42dd-a4d8-d145df8eb5c3"
+        },
+        {
+          "id": "5a4249dd-1b93-4d9c-b0aa-1e30cc0f3d6c",
+          "description": "Implement CRUD endpoints",
+          "dependencies": [
+            "0",
+            "1",
+            "2"
+          ],
+          "status": "in_progress",
+          "order": 4,
+          "assignedExecutor": "7ca7923a-72e7-42dd-a4d8-d145df8eb5c3"
+        }
+      ],
+      "executorAssignments": {
+        "7ca7923a-72e7-42dd-a4d8-d145df8eb5c3": [
+          "8e72b88f-db43-4be8-9078-e1fef7fc7e79",
+          "5b4f5766-814c-4f1d-89d6-56a72fbdead6",
+          "b5c4a26e-1836-44bc-a207-3d5796968ab1",
+          "5a4249dd-1b93-4d9c-b0aa-1e30cc0f3d6c"
+        ]
+      },
+      "status": "in_progress",
+      "createdAt": "2025-09-18T09:12:14.625Z",
+      "updatedAt": "2025-09-18T09:12:49.513Z"
+    },
+    {
+      "id": "b7165dee-90a5-49c6-b982-25aef1aff2ce",
+      "taskId": "123bf445-3a04-4104-b34f-b3cdcc5164f5",
+      "plannerId": "0de8097b-cc9c-4c5d-9d96-d27fe089af10",
+      "steps": [
+        {
+          "id": "33ec1d14-f5ce-4e74-901c-00f6a4feb2d7",
+          "description": "Create calculator.py file with basic structure",
+          "dependencies": [],
+          "status": "pending",
+          "order": 1
+        },
+        {
+          "id": "247317cd-8091-4745-a3ec-0ef7078687de",
+          "description": "Implement basic arithmetic operations (add, subtract, multiply, divide)",
+          "dependencies": [],
+          "status": "pending",
+          "order": 2
+        },
+        {
+          "id": "9b066c03-c124-4eff-a8f7-1498d73fa812",
+          "description": "Add input validation and error handling",
+          "dependencies": [
+            "1"
+          ],
+          "status": "pending",
+          "order": 3
+        },
+        {
+          "id": "2ade2829-ced7-4525-9429-77fa5e31f429",
+          "description": "Create CLI interface with menu system",
+          "dependencies": [
+            "0",
+            "1",
+            "2"
+          ],
+          "status": "pending",
+          "order": 4
+        },
+        {
+          "id": "685d2d7d-4be3-46ed-85a6-750dd2a81a37",
+          "description": "Test all functions and create usage examples",
+          "dependencies": [
+            "3"
+          ],
+          "status": "pending",
+          "order": 5
+        }
+      ],
+      "executorAssignments": {},
+      "status": "draft",
+      "createdAt": "2025-09-18T09:41:13.053Z",
+      "updatedAt": "2025-09-18T09:41:13.053Z"
+    },
+    {
+      "id": "516e1edd-9a03-4f87-94b9-1b7a9f47f305",
+      "taskId": "1cd2f1b2-1130-47d2-b8ed-88b7268c49e9",
+      "plannerId": "b1b05f2c-7a01-41fe-a9b2-13e7b22546ac",
+      "steps": [
+        {
+          "id": "75fc08d6-6fa9-49bc-9faf-321373203555",
+          "description": "Create calculator.py file",
+          "dependencies": [],
+          "status": "in_progress",
+          "order": 1,
+          "assignedExecutor": "4406ec28-30bb-468f-95d4-4c57c0219aea"
+        },
+        {
+          "id": "0113b3a5-3009-482a-ac40-68d4fd51ed3f",
+          "description": "Implement add function",
+          "dependencies": [],
+          "status": "in_progress",
+          "order": 2,
+          "assignedExecutor": "4406ec28-30bb-468f-95d4-4c57c0219aea"
+        },
+        {
+          "id": "45286875-5403-4f32-a7cd-01fadf495aa4",
+          "description": "Implement subtract function",
+          "dependencies": [],
+          "status": "in_progress",
+          "order": 3,
+          "assignedExecutor": "4406ec28-30bb-468f-95d4-4c57c0219aea"
+        },
+        {
+          "id": "cdcf5589-ef74-45b6-8776-df4b0a3c1fef",
+          "description": "Implement multiply function",
+          "dependencies": [],
+          "status": "in_progress",
+          "order": 4,
+          "assignedExecutor": "4406ec28-30bb-468f-95d4-4c57c0219aea"
+        },
+        {
+          "id": "81bc1f6b-8ba3-46a1-b463-0861eafa3b11",
+          "description": "Implement divide function",
+          "dependencies": [],
+          "status": "in_progress",
+          "order": 5,
+          "assignedExecutor": "4406ec28-30bb-468f-95d4-4c57c0219aea"
+        },
+        {
+          "id": "d77c54db-60de-4850-8d51-709307c75458",
+          "description": "Create main function with test cases",
+          "dependencies": [],
+          "status": "in_progress",
+          "order": 6,
+          "assignedExecutor": "4406ec28-30bb-468f-95d4-4c57c0219aea"
+        },
+        {
+          "id": "db0375e5-82c3-41e0-9a72-724c301af706",
+          "description": "Run and test the calculator",
+          "dependencies": [],
+          "status": "in_progress",
+          "order": 7,
+          "assignedExecutor": "4406ec28-30bb-468f-95d4-4c57c0219aea"
+        }
+      ],
+      "executorAssignments": {
+        "4406ec28-30bb-468f-95d4-4c57c0219aea": [
+          "75fc08d6-6fa9-49bc-9faf-321373203555",
+          "0113b3a5-3009-482a-ac40-68d4fd51ed3f",
+          "45286875-5403-4f32-a7cd-01fadf495aa4",
+          "cdcf5589-ef74-45b6-8776-df4b0a3c1fef",
+          "81bc1f6b-8ba3-46a1-b463-0861eafa3b11",
+          "d77c54db-60de-4850-8d51-709307c75458",
+          "db0375e5-82c3-41e0-9a72-724c301af706"
+        ]
+      },
+      "status": "in_progress",
+      "createdAt": "2025-09-18T11:19:23.750Z",
+      "updatedAt": "2025-09-18T11:19:37.821Z"
+    }
+  ],
+  "reports": [
+    {
+      "id": "0babe47d-c7c1-493a-a3e4-95f71f644072",
+      "planId": "4ff70e80-5998-4992-bed6-a207a0872bbb",
+      "stepId": "affef50b-33b3-481a-b40f-8854a54cd4e7",
+      "executorId": "3387ea1d-c4e2-45b7-9d52-945f9dd0f4c1",
+      "results": {
+        "action": "wrote",
+        "function": "hello_world"
+      },
+      "status": "success",
+      "timestamp": "2025-09-18T10:02:06.829Z"
+    },
+    {
+      "id": "5444fecf-ee01-42f6-b537-33845a746422",
+      "planId": "713605e3-b981-4ee7-98d6-deed24b3b32a",
+      "stepId": "8e72b88f-db43-4be8-9078-e1fef7fc7e79",
+      "executorId": "7ca7923a-72e7-42dd-a4d8-d145df8eb5c3",
+      "results": {
+        "message": "Express.js project setup completed",
+        "files": [
+          "package.json",
+          "server.js",
+          "app.js"
+        ]
+      },
+      "status": "success",
+      "timestamp": "2025-09-18T09:13:20.936Z"
+    },
+    {
+      "id": "9b9fb7f6-8ed0-439b-9431-7a8ad77da626",
+      "planId": "4ff70e80-5998-4992-bed6-a207a0872bbb",
+      "stepId": "c14712fb-1691-44ce-8989-d2bce37fe95e",
+      "executorId": "3387ea1d-c4e2-45b7-9d52-945f9dd0f4c1",
+      "results": {
+        "action": "tested",
+        "output": "Hello, World!"
+      },
+      "status": "success",
+      "timestamp": "2025-09-18T10:02:18.832Z"
+    },
+    {
+      "id": "b6097ab0-13e6-48f1-8a86-dd40cb59662a",
+      "planId": "4ff70e80-5998-4992-bed6-a207a0872bbb",
+      "stepId": "e5c0e909-1f1b-4616-809c-edd3fba7a3f1",
+      "executorId": "3387ea1d-c4e2-45b7-9d52-945f9dd0f4c1",
+      "results": {
+        "action": "created",
+        "file": "hello.py"
+      },
+      "status": "success",
+      "timestamp": "2025-09-18T10:02:01.111Z"
+    },
+    {
+      "id": "c096a329-ef5a-4164-8ceb-f02dd0dd1617",
+      "planId": "4ff70e80-5998-4992-bed6-a207a0872bbb",
+      "stepId": "debd039c-f2fc-4d3c-83b1-f6d5c96e17c6",
+      "executorId": "3387ea1d-c4e2-45b7-9d52-945f9dd0f4c1",
+      "results": {
+        "action": "added",
+        "block": "main block"
+      },
+      "status": "success",
+      "timestamp": "2025-09-18T10:02:13.051Z"
+    }
+  ],
+  "lastUpdated": "2025-09-18T11:19:37.823Z"
+}
