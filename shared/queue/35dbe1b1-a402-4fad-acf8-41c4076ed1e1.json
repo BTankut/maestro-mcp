@@ -1,0 +1,10 @@
+{
+  "id": "35dbe1b1-a402-4fad-acf8-41c4076ed1e1",
+  "type": "message",
+  "from": "codex-default",
+  "to": "codex-default",
+  "content": "Test message - checking if auto-polling is working correctly now!",
+  "timestamp": "2025-09-18T15:53:10.742Z",
+  "read": true,
+  "priority": "high"
+}

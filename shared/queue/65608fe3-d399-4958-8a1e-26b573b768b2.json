@@ -1,0 +1,10 @@
+{
+  "id": "65608fe3-d399-4958-8a1e-26b573b768b2",
+  "type": "message",
+  "from": "codex-default",
+  "to": "codex-default",
+  "content": "TEST (Script Kapalı): Bu mesaj korunmalı! Manuel check_messages yaptığında gelmeli.",
+  "timestamp": "2025-09-18T15:44:35.582Z",
+  "read": true,
+  "priority": "urgent"
+}

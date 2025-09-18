@@ -12,6 +12,8 @@ import {
   SystemState,
   Step
 } from './types/index.js';
+import { MessageQueue, QueueMessage } from './message-queue.js';
+import { AutoPoller } from './auto-poller.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -23,11 +25,18 @@ export class Orchestrator {
   private reports: Map<string, ExecutionReport> = new Map();
   private sharedPath: string;
   private watcher?: any;
+  private messageQueue: MessageQueue;
+  private roleAssignments: Map<string, 'planner' | 'executor'> = new Map();
+  private autoPoller: AutoPoller;
+  private autoPollClients: Set<string> = new Set();
 
   constructor() {
     this.sharedPath = path.join(__dirname, '../../shared');
+    this.messageQueue = new MessageQueue(this.sharedPath);
+    this.autoPoller = new AutoPoller();
     this.initializeDirectories();
     this.startFileWatcher();
+    this.setupAutoPolling();
   }
 
   private async initializeDirectories() {
@@ -97,6 +106,49 @@ export class Orchestrator {
   public registerClient(clientInfo: ClientInfo): void {
     this.clients.set(clientInfo.id, clientInfo);
     this.updateSystemState();
+  }
+
+  public registerAsPlanner(name: string, sessionId?: string): ClientInfo {
+    const clientInfo: ClientInfo = {
+      id: sessionId || uuidv4(),
+      name,
+      role: 'planner',
+      status: 'active',
+      registeredAt: new Date()
+    };
+    this.registerClient(clientInfo);
+    return clientInfo;
+  }
+
+  public registerAsExecutor(name: string, sessionId?: string): ClientInfo {
+    const clientInfo: ClientInfo = {
+      id: sessionId || uuidv4(),
+      name,
+      role: 'executor',
+      status: 'active',
+      registeredAt: new Date()
+    };
+    this.registerClient(clientInfo);
+    return clientInfo;
+  }
+
+  public switchRole(clientId: string): ClientInfo {
+    const client = this.clients.get(clientId);
+    if (!client) {
+      throw new Error(`Client ${clientId} not found`);
+    }
+
+    // Toggle between planner and executor
+    client.role = client.role === 'planner' ? 'executor' : 'planner';
+    client.updatedAt = new Date();
+
+    this.clients.set(clientId, client);
+    this.updateSystemState();
+    return client;
+  }
+
+  public whoami(clientId: string): ClientInfo | undefined {
+    return this.clients.get(clientId);
   }
 
   public unregisterClient(clientId: string): void {
@@ -314,5 +366,210 @@ export class Orchestrator {
     if (this.watcher) {
       this.watcher.close();
     }
+    this.autoPoller.cleanup();
+  }
+
+  private setupAutoPolling(): void {
+    // Listen for poll events from AutoPoller
+    this.autoPoller.on('poll', async (clientId: string) => {
+      const result = await this.checkMessages(clientId);
+
+      // Record activity if messages found
+      if (result.hasMessages && result.messages.length > 0) {
+        this.autoPoller.recordActivity(clientId, result.messages.length);
+
+        // Auto-process messages for executors
+        const client = this.clients.get(clientId);
+        if (client?.role === 'executor') {
+          for (const message of result.messages) {
+            if (message.type === 'task') {
+              console.log(`[AutoPoller] Auto-processing task for ${clientId}`);
+              // Here you could trigger automatic task processing
+            }
+          }
+        }
+      }
+    });
+  }
+
+  // ========== POLLING & MESSAGE QUEUE METHODS ==========
+
+  public async checkMessages(clientId: string): Promise<any> {
+    // Use the new auto-registration method
+    this.autoRegisterClient(clientId);
+
+    // Instant check - NO WAITING!
+    const result = await this.messageQueue.checkMessages(clientId);
+
+    // Add polling hint
+    const hint = result.hasMessages
+      ? 'Process messages and check again for more.'
+      : 'No messages. Check again in a few seconds.';
+
+    return { ...result, hint };
+  }
+
+  public async sendTaskToExecutor(task: Task, plannerId: string): Promise<void> {
+    // Find available executors
+    const executors = Array.from(this.clients.values()).filter(c => c.role === 'executor');
+
+    if (executors.length === 0) {
+      console.log('No executors available, queuing task...');
+    }
+
+    // Send to all executors (they will pick up via polling)
+    for (const executor of executors) {
+      await this.messageQueue.sendMessage(
+        plannerId,
+        executor.id,
+        'task',
+        {
+          task,
+          instruction: 'New task requires execution. Please process immediately.',
+          suggestedTools: ['execute_step', 'submit_report']
+        },
+        'high'
+      );
+    }
+  }
+
+  public async sendPlanToExecutor(plan: Plan, plannerId: string): Promise<void> {
+    // Send plan to assigned executors
+    for (const [executorId, stepIds] of Object.entries(plan.executorAssignments)) {
+      const steps = plan.steps.filter(s => stepIds.includes(s.id));
+
+      await this.messageQueue.sendMessage(
+        plannerId,
+        executorId,
+        'plan',
+        {
+          planId: plan.id,
+          taskId: plan.taskId,
+          assignedSteps: steps,
+          instruction: 'You have been assigned steps in this plan. Execute them in order.',
+          totalSteps: plan.steps.length
+        },
+        'high'
+      );
+    }
+  }
+
+  public async sendReportToPlanner(report: ExecutionReport, executorId: string): Promise<void> {
+    const plan = this.plans.get(report.planId);
+    if (!plan) return;
+
+    await this.messageQueue.sendMessage(
+      executorId,
+      plan.plannerId,
+      'report',
+      {
+        report,
+        message: `Step ${report.stepId} execution ${report.status}`,
+        needsReview: report.status === 'failed'
+      },
+      report.status === 'failed' ? 'urgent' : 'medium'
+    );
+  }
+
+  public setTypingStatus(clientId: string, isTyping: boolean): void {
+    this.messageQueue.setTyping(clientId, isTyping);
+  }
+
+  // ========== AUTO-POLL METHODS ==========
+
+  public enableAutoPolling(clientId: string, enabled: boolean = true): void {
+    if (enabled) {
+      this.autoPollClients.add(clientId);
+      console.log(`[AUTO-POLL] ✅ Enabled for ${clientId}`);
+    } else {
+      this.autoPollClients.delete(clientId);
+      console.log(`[AUTO-POLL] ❌ Disabled for ${clientId}`);
+    }
+  }
+
+  // Auto-detect and register clients when they first connect
+  public autoRegisterClient(clientId: string): boolean {
+    // Don't re-register existing clients
+    if (this.clients.has(clientId)) {
+      return false;
+    }
+
+    // Detect client type and role from ID patterns
+    let clientName = clientId;
+    let role: 'planner' | 'executor' = 'executor';
+
+    // Check for known patterns
+    if (clientId.toLowerCase().includes('claude')) {
+      clientName = 'Claude';
+      role = 'planner';
+    } else if (clientId.toLowerCase().includes('codex')) {
+      clientName = 'Codex';
+      role = 'executor';
+    } else if (clientId.toLowerCase().includes('planner')) {
+      role = 'planner';
+    } else if (clientId.toLowerCase().includes('executor')) {
+      role = 'executor';
+    }
+
+    console.log(`[AUTO-REGISTER] New client detected: ${clientId} as ${clientName} (${role})`);
+
+    // Create and register the client
+    const clientInfo: ClientInfo = {
+      id: clientId,
+      name: clientName,
+      role: role,
+      status: 'active',
+      registeredAt: new Date()
+    };
+
+    this.registerClient(clientInfo);
+
+    // Enable auto-polling for this client
+    this.enableAutoPolling(clientId, true);
+
+    // Send welcome message
+    this.messageQueue.sendMessage(
+      'system',
+      clientId,
+      'message',
+      {
+        content: `Welcome ${clientName}! You've been auto-registered as ${role}. Auto-polling is enabled.`,
+        timestamp: new Date()
+      },
+      'high'
+    );
+
+    return true;
+  }
+
+  public isAutoPollEnabled(clientId: string): boolean {
+    return this.autoPollClients.has(clientId);
+  }
+
+  public async autoAssignRole(clientId: string, firstAction: string): Promise<'planner' | 'executor'> {
+    // If first action is creating a task, they're a planner
+    if (firstAction.includes('create_task') || firstAction.includes('create_plan')) {
+      this.roleAssignments.set(clientId, 'planner');
+
+      // Make others executors
+      for (const [id, _] of this.clients) {
+        if (id !== clientId && !this.roleAssignments.has(id)) {
+          this.roleAssignments.set(id, 'executor');
+
+          // Update their role
+          const client = this.clients.get(id);
+          if (client) {
+            client.role = 'executor';
+            this.clients.set(id, client);
+          }
+        }
+      }
+
+      return 'planner';
+    }
+
+    // Default to executor
+    this.roleAssignments.set(clientId, 'executor');
+    return 'executor';
   }
 }

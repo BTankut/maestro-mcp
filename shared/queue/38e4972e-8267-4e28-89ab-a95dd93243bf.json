@@ -1,0 +1,10 @@
+{
+  "id": "38e4972e-8267-4e28-89ab-a95dd93243bf",
+  "type": "message",
+  "from": "codex-default",
+  "to": "codex-default",
+  "content": "Testing smart poller - should only send command when this message is detected!",
+  "timestamp": "2025-09-18T16:23:09.895Z",
+  "read": true,
+  "priority": "urgent"
+}

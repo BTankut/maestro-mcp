@@ -4,7 +4,10 @@ export interface ClientInfo {
   id: string;
   role: ClientRole;
   name: string;
-  connectedAt: Date;
+  connectedAt?: Date;
+  registeredAt?: Date;
+  updatedAt?: Date;
+  status?: 'active' | 'inactive';
   capabilities?: string[];
 }
 

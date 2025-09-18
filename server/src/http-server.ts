@@ -203,6 +203,132 @@ const handleListTools = async () => {
           type: 'object',
           properties: {}
         }
+      },
+      {
+        name: 'register_as_planner',
+        description: 'Quick registration as a planner (simplified)',
+        inputSchema: {
+          type: 'object',
+          properties: {
+            name: {
+              type: 'string',
+              description: 'Your name (e.g., "Claude", "GPT", "Human")'
+            }
+          },
+          required: ['name']
+        }
+      },
+      {
+        name: 'register_as_executor',
+        description: 'Quick registration as an executor (simplified)',
+        inputSchema: {
+          type: 'object',
+          properties: {
+            name: {
+              type: 'string',
+              description: 'Your name (e.g., "Codex", "Assistant", "Worker")'
+            }
+          },
+          required: ['name']
+        }
+      },
+      {
+        name: 'switch_role',
+        description: 'Switch your current role between planner and executor',
+        inputSchema: {
+          type: 'object',
+          properties: {
+            clientId: {
+              type: 'string',
+              description: 'Your client ID (optional, will use session ID if not provided)'
+            }
+          }
+        }
+      },
+      {
+        name: 'whoami',
+        description: 'Get your current registration info and role',
+        inputSchema: {
+          type: 'object',
+          properties: {
+            clientId: {
+              type: 'string',
+              description: 'Your client ID (optional, will use session ID if not provided)'
+            }
+          }
+        }
+      },
+      {
+        name: 'check_messages',
+        description: '📬 Check for new messages, tasks, or reports (WhatsApp-style polling)',
+        inputSchema: {
+          type: 'object',
+          properties: {
+            clientId: {
+              type: 'string',
+              description: 'Your client ID (optional, will use session ID if not provided)'
+            }
+          }
+        }
+      },
+      {
+        name: 'send_message',
+        description: '💬 Send a message to another agent',
+        inputSchema: {
+          type: 'object',
+          properties: {
+            to: {
+              type: 'string',
+              description: 'Recipient client ID'
+            },
+            content: {
+              type: 'string',
+              description: 'Message content'
+            },
+            type: {
+              type: 'string',
+              enum: ['message', 'task', 'plan', 'report'],
+              description: 'Message type'
+            },
+            priority: {
+              type: 'string',
+              enum: ['low', 'medium', 'high', 'urgent'],
+              description: 'Message priority (default: medium)'
+            }
+          },
+          required: ['to', 'content']
+        }
+      },
+      {
+        name: 'set_typing',
+        description: '💭 Set typing indicator status',
+        inputSchema: {
+          type: 'object',
+          properties: {
+            isTyping: {
+              type: 'boolean',
+              description: 'Whether you are currently typing'
+            },
+            clientId: {
+              type: 'string',
+              description: 'Your client ID (optional, will use session ID if not provided)'
+            }
+          },
+          required: ['isTyping']
+        }
+      },
+      {
+        name: 'start_auto_poll',
+        description: '🔄 Enable automatic message checking - messages will be delivered with every tool response',
+        inputSchema: {
+          type: 'object',
+          properties: {
+            enabled: {
+              type: 'boolean',
+              description: 'true to enable auto-poll, false to disable (default: true)'
+            }
+          }
+        }
       }
     ],
   };
@@ -220,6 +346,9 @@ const handleCallTool = async (request: any) => {
       }]
     };
   }
+
+  let result: any;
+  const clientId = args.clientId || 'codex-default';
 
   try {
     switch (name) {
@@ -427,14 +556,306 @@ const handleCallTool = async (request: any) => {
         };
       }
 
-      default:
+      case 'register_as_planner': {
+        // Use session ID from request context if available
+        const sessionId = (request as any).sessionId || undefined;
+        const clientInfo = orchestrator.registerAsPlanner(args.name as string, sessionId);
+
         return {
+          content: [{
+            type: 'text',
+            text: JSON.stringify({
+              success: true,
+              clientId: clientInfo.id,
+              name: clientInfo.name,
+              role: 'planner',
+              message: `✅ Successfully registered as PLANNER!\nName: ${clientInfo.name}\nID: ${clientInfo.id}\nYou can now create plans for tasks.`
+            }, null, 2)
+          }]
+        };
+      }
+
+      case 'register_as_executor': {
+        // Use session ID from request context if available
+        const sessionId = (request as any).sessionId || undefined;
+        const clientInfo = orchestrator.registerAsExecutor(args.name as string, sessionId);
+
+        return {
+          content: [{
+            type: 'text',
+            text: JSON.stringify({
+              success: true,
+              clientId: clientInfo.id,
+              name: clientInfo.name,
+              role: 'executor',
+              message: `✅ Successfully registered as EXECUTOR!\nName: ${clientInfo.name}\nID: ${clientInfo.id}\nYou can now execute plan steps.`
+            }, null, 2)
+          }]
+        };
+      }
+
+      case 'switch_role': {
+        const clientId = args.clientId || (request as any).sessionId;
+        if (!clientId) {
+          return {
+            content: [{
+              type: 'text',
+              text: JSON.stringify({
+                success: false,
+                error: 'No client ID provided and no session ID found. Please provide clientId.'
+              }, null, 2)
+            }]
+          };
+        }
+
+        try {
+          const updatedClient = orchestrator.switchRole(clientId as string);
+          return {
+            content: [{
+              type: 'text',
+              text: JSON.stringify({
+                success: true,
+                clientId: updatedClient.id,
+                name: updatedClient.name,
+                newRole: updatedClient.role,
+                message: `✨ Role switched successfully!\nYou are now: ${updatedClient.role.toUpperCase()}\nName: ${updatedClient.name}`
+              }, null, 2)
+            }]
+          };
+        } catch (error: any) {
+          return {
+            content: [{
+              type: 'text',
+              text: JSON.stringify({
+                success: false,
+                error: error.message
+              }, null, 2)
+            }]
+          };
+        }
+      }
+
+      case 'check_messages': {
+        // Default to 'codex-default' for Codex clients that don't send clientId
+        const clientId = args.clientId || 'codex-default';
+
+        try {
+          const result = await orchestrator.checkMessages(clientId);
+
+          // Format messages for display
+          const formattedMessages = result.messages.map((msg: any) => ({
+            from: msg.from,
+            type: msg.type,
+            priority: msg.priority,
+            content: msg.content,
+            timestamp: msg.timestamp
+          }));
+
+          return {
+            content: [{
+              type: 'text',
+              text: JSON.stringify({
+                success: true,
+                hasMessages: result.hasMessages,
+                messageCount: result.messages.length,
+                messages: formattedMessages,
+                isAnyoneTyping: result.isAnyoneTyping,
+                typingClients: result.typingClients,
+                instruction: result.hasMessages ?
+                  '📬 You have new messages! Process them based on type and priority.' :
+                  '✅ No new messages. Check again later.'
+              }, null, 2)
+            }]
+          };
+        } catch (error: any) {
+          return {
+            content: [{
+              type: 'text',
+              text: JSON.stringify({
+                success: false,
+                error: error.message
+              }, null, 2)
+            }]
+          };
+        }
+      }
+
+      case 'send_message': {
+        const fromId = args.from || 'codex-default';
+        const { to, content, type = 'message', priority = 'medium' } = args;
+
+        try {
+          // Import MessageQueue type
+          const messageQueue = (orchestrator as any).messageQueue;
+          const message = await messageQueue.sendMessage(
+            fromId,
+            to as string,
+            type as any,
+            content,
+            priority as any
+          );
+
+          return {
+            content: [{
+              type: 'text',
+              text: JSON.stringify({
+                success: true,
+                messageId: message.id,
+                sent: true,
+                message: `Message sent to ${to} with ${priority} priority`
+              }, null, 2)
+            }]
+          };
+        } catch (error: any) {
+          return {
+            content: [{
+              type: 'text',
+              text: JSON.stringify({
+                success: false,
+                error: error.message
+              }, null, 2)
+            }]
+          };
+        }
+      }
+
+      case 'set_typing': {
+        const clientId = args.clientId || 'codex-default';
+        const { isTyping } = args;
+
+        try {
+          orchestrator.setTypingStatus(clientId as string, isTyping as boolean);
+
+          return {
+            content: [{
+              type: 'text',
+              text: JSON.stringify({
+                success: true,
+                status: isTyping ? 'typing_started' : 'typing_stopped',
+                message: isTyping ? '💭 Typing indicator ON' : '✅ Typing indicator OFF'
+              }, null, 2)
+            }]
+          };
+        } catch (error: any) {
+          return {
+            content: [{
+              type: 'text',
+              text: JSON.stringify({
+                success: false,
+                error: error.message
+              }, null, 2)
+            }]
+          };
+        }
+      }
+
+      case 'start_auto_poll': {
+        const clientId = args.clientId || 'codex-default';
+        const enabled = args.enabled !== false; // Default true
+
+        try {
+          orchestrator.enableAutoPolling(clientId, enabled);
+
+          return {
+            content: [{
+              type: 'text',
+              text: JSON.stringify({
+                success: true,
+                enabled,
+                clientId,
+                message: enabled
+                  ? '🔄 Auto-polling ENABLED! Messages will be automatically included in all tool responses.'
+                  : '⏹️ Auto-polling DISABLED. Use check_messages manually.'
+              }, null, 2)
+            }]
+          };
+        } catch (error: any) {
+          return {
+            content: [{
+              type: 'text',
+              text: JSON.stringify({
+                success: false,
+                error: error.message
+              }, null, 2)
+            }]
+          };
+        }
+      }
+
+      case 'whoami': {
+        // Default to 'codex-default' for Codex clients
+        const clientId = args.clientId || 'codex-default';
+
+        const clientInfo = orchestrator.whoami(clientId as string);
+        if (!clientInfo) {
+          return {
+            content: [{
+              type: 'text',
+              text: JSON.stringify({
+                success: false,
+                message: 'Client not found. You may need to register first.'
+              }, null, 2)
+            }]
+          };
+        }
+
+        return {
+          content: [{
+            type: 'text',
+            text: JSON.stringify({
+              success: true,
+              clientInfo: {
+                id: clientInfo.id,
+                name: clientInfo.name,
+                role: clientInfo.role,
+                status: clientInfo.status || 'active',
+                registeredAt: clientInfo.registeredAt
+              },
+              message: `📋 Your Info:\nName: ${clientInfo.name}\nRole: ${clientInfo.role.toUpperCase()}\nID: ${clientInfo.id}\nStatus: ${clientInfo.status || 'active'}`
+            }, null, 2)
+          }]
+        };
+      }
+
+      default:
+        result = {
           content: [{
             type: 'text',
             text: `Unknown tool: ${name}`
           }]
         };
+        return result;
     }
+
+    // ⚡ AUTO-POLL PIGGYBACK: Add pending messages to EVERY response
+    if (orchestrator.isAutoPollEnabled(clientId) && name !== 'check_messages') {
+      const messages = await orchestrator.checkMessages(clientId);
+
+      if (messages.hasMessages && messages.messages.length > 0) {
+        // Parse existing response
+        const originalContent = result.content[0].text;
+        let parsedContent;
+
+        try {
+          parsedContent = typeof originalContent === 'string' && originalContent.startsWith('{')
+            ? JSON.parse(originalContent)
+            : { message: originalContent };
+        } catch {
+          parsedContent = { message: originalContent };
+        }
+
+        // Add pending messages
+        parsedContent._pendingMessages = messages.messages;
+        parsedContent._hasNewMessages = true;
+        parsedContent._messageCount = messages.messages.length;
+
+        // Update response
+        result.content[0].text = JSON.stringify(parsedContent, null, 2);
+      }
+    }
+
+    return result;
+
   } catch (error: any) {
     return {
       content: [{

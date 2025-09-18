@@ -1,0 +1,13 @@
+{
+  "id": "6e8921e3-a3ad-4004-b87b-85acdab739ab",
+  "type": "message",
+  "from": "system",
+  "to": "codex-default",
+  "content": {
+    "content": "Welcome Codex! You've been auto-registered as executor. Auto-polling is enabled.",
+    "timestamp": "2025-09-18T15:27:03.142Z"
+  },
+  "timestamp": "2025-09-18T15:27:03.142Z",
+  "read": true,
+  "priority": "high"
+}}

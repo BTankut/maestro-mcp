@@ -1,0 +1,10 @@
+{
+  "id": "efaacf4d-5b0c-46d6-838d-552b60123ab2",
+  "type": "message",
+  "from": "codex-default",
+  "to": "codex-default",
+  "content": "MANUEL TEST: Codex penceresine git ve 'check_messages' yaz. Bu mesajı görmelisin!",
+  "timestamp": "2025-09-18T15:31:45.822Z",
+  "read": true,
+  "priority": "urgent"
+}

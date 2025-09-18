@@ -1,0 +1,10 @@
+{
+  "id": "28bca588-d80f-42ce-9d0c-7f3e3b98189b",
+  "type": "message",
+  "from": "codex-default",
+  "to": "codex-default",
+  "content": "🎉 BAŞARILI TEST! Script bu mesajı algılayıp otomatik check_messages yazmalı! Eğer bu mesajı görüyorsan AUTO-POLLING ÇALIŞIYOR!",
+  "timestamp": "2025-09-18T15:30:56.438Z",
+  "read": true,
+  "priority": "urgent"
+}

@@ -1,0 +1,10 @@
+{
+  "id": "9b3f9f5c-daf0-404d-99b3-d7b13794f309",
+  "type": "message",
+  "from": "codex-default",
+  "to": "codex-default",
+  "content": "Testing robust poller - this message should arrive automatically!",
+  "timestamp": "2025-09-18T16:05:42.506Z",
+  "read": true,
+  "priority": "urgent"
+}

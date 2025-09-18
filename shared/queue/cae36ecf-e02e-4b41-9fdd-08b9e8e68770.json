@@ -1,0 +1,10 @@
+{
+  "id": "cae36ecf-e02e-4b41-9fdd-08b9e8e68770",
+  "type": "message",
+  "from": "codex-default",
+  "to": "codex-default",
+  "content": "Test message 2 - Auto-poller should deliver this within 30 seconds!",
+  "timestamp": "2025-09-18T16:03:56.031Z",
+  "read": true,
+  "priority": "urgent"
+}

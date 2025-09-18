@@ -1,18 +1,25 @@
 {
   "activeClients": [
     {
-      "id": "b1b05f2c-7a01-41fe-a9b2-13e7b22546ac",
-      "role": "planner",
-      "name": "Claude-Planner",
-      "connectedAt": "2025-09-18T11:16:23.977Z",
-      "capabilities": []
+      "id": "codex",
+      "name": "Codex",
+      "role": "executor",
+      "status": "active",
+      "registeredAt": "2025-09-18T15:21:36.808Z"
     },
     {
-      "id": "4406ec28-30bb-468f-95d4-4c57c0219aea",
+      "id": "codex-default",
+      "name": "Codex",
       "role": "executor",
-      "name": "Codex-Executor",
-      "connectedAt": "2025-09-18T11:18:06.679Z",
-      "capabilities": []
+      "status": "active",
+      "registeredAt": "2025-09-18T15:27:03.142Z"
+    },
+    {
+      "id": "69164d9f-eb13-4bd9-836a-4a117899c680",
+      "name": "Claude",
+      "role": "planner",
+      "status": "active",
+      "registeredAt": "2025-09-18T15:32:53.957Z"
     }
   ],
   "activeTasks": [
@@ -30,6 +37,33 @@
       "updatedAt": "2025-09-18T09:41:04.077Z",
       "createdBy": "user",
       "assignedTo": "0de8097b-cc9c-4c5d-9d96-d27fe089af10"
+    },
+    {
+      "id": "1cd2f1b2-1130-47d2-b8ed-88b7268c49e9",
+      "description": "Create a simple Python calculator script",
+      "requirements": [
+        "Create calculator.py file",
+        "Add basic math operations (add, subtract, multiply, divide)",
+        "Include a main function to test operations"
+      ],
+      "status": "executing",
+      "createdAt": "2025-09-18T11:19:01.637Z",
+      "updatedAt": "2025-09-18T11:19:13.033Z",
+      "createdBy": "user",
+      "assignedTo": "b1b05f2c-7a01-41fe-a9b2-13e7b22546ac"
+    },
+    {
+      "id": "23e33a24-acf1-4f6f-bf2b-7d62e68eae21",
+      "description": "Create a simple hello world script in Python",
+      "requirements": [
+        "Print 'Hello from Maestro MCP!'",
+        "Add timestamp",
+        "Save output to file"
+      ],
+      "status": "pending",
+      "createdAt": "2025-09-18T13:19:59.446Z",
+      "updatedAt": "2025-09-18T13:19:59.446Z",
+      "createdBy": "user"
     },
     {
       "id": "91fd0dbb-be5c-4137-ade5-d719780c9479",
@@ -73,18 +107,18 @@
       "assignedTo": "63e49cad-a8df-4dc3-9bcd-34b50f6af739"
     },
     {
-      "id": "1cd2f1b2-1130-47d2-b8ed-88b7268c49e9",
-      "description": "Create a simple Python calculator script",
+      "id": "dea1659b-8f11-44d5-bb94-ef08d5ff28d1",
+      "description": "Create a REST API with Node.js and Express",
       "requirements": [
-        "Create calculator.py file",
-        "Add basic math operations (add, subtract, multiply, divide)",
-        "Include a main function to test operations"
+        "Setup Express server",
+        "Create CRUD endpoints",
+        "Add error handling",
+        "Include documentation"
       ],
-      "status": "executing",
-      "createdAt": "2025-09-18T11:19:01.637Z",
-      "updatedAt": "2025-09-18T11:19:13.033Z",
-      "createdBy": "user",
-      "assignedTo": "b1b05f2c-7a01-41fe-a9b2-13e7b22546ac"
+      "status": "pending",
+      "createdAt": "2025-09-18T13:13:40.896Z",
+      "updatedAt": "2025-09-18T13:13:40.896Z",
+      "createdBy": "user"
     }
   ],
   "activePlans": [
@@ -143,6 +177,83 @@
       "status": "completed",
       "createdAt": "2025-09-18T10:01:38.041Z",
       "updatedAt": "2025-09-18T10:01:44.445Z"
+    },
+    {
+      "id": "516e1edd-9a03-4f87-94b9-1b7a9f47f305",
+      "taskId": "1cd2f1b2-1130-47d2-b8ed-88b7268c49e9",
+      "plannerId": "b1b05f2c-7a01-41fe-a9b2-13e7b22546ac",
+      "steps": [
+        {
+          "id": "75fc08d6-6fa9-49bc-9faf-321373203555",
+          "description": "Create calculator.py file",
+          "dependencies": [],
+          "status": "in_progress",
+          "order": 1,
+          "assignedExecutor": "4406ec28-30bb-468f-95d4-4c57c0219aea"
+        },
+        {
+          "id": "0113b3a5-3009-482a-ac40-68d4fd51ed3f",
+          "description": "Implement add function",
+          "dependencies": [],
+          "status": "in_progress",
+          "order": 2,
+          "assignedExecutor": "4406ec28-30bb-468f-95d4-4c57c0219aea"
+        },
+        {
+          "id": "45286875-5403-4f32-a7cd-01fadf495aa4",
+          "description": "Implement subtract function",
+          "dependencies": [],
+          "status": "in_progress",
+          "order": 3,
+          "assignedExecutor": "4406ec28-30bb-468f-95d4-4c57c0219aea"
+        },
+        {
+          "id": "cdcf5589-ef74-45b6-8776-df4b0a3c1fef",
+          "description": "Implement multiply function",
+          "dependencies": [],
+          "status": "in_progress",
+          "order": 4,
+          "assignedExecutor": "4406ec28-30bb-468f-95d4-4c57c0219aea"
+        },
+        {
+          "id": "81bc1f6b-8ba3-46a1-b463-0861eafa3b11",
+          "description": "Implement divide function",
+          "dependencies": [],
+          "status": "in_progress",
+          "order": 5,
+          "assignedExecutor": "4406ec28-30bb-468f-95d4-4c57c0219aea"
+        },
+        {
+          "id": "d77c54db-60de-4850-8d51-709307c75458",
+          "description": "Create main function with test cases",
+          "dependencies": [],
+          "status": "in_progress",
+          "order": 6,
+          "assignedExecutor": "4406ec28-30bb-468f-95d4-4c57c0219aea"
+        },
+        {
+          "id": "db0375e5-82c3-41e0-9a72-724c301af706",
+          "description": "Run and test the calculator",
+          "dependencies": [],
+          "status": "in_progress",
+          "order": 7,
+          "assignedExecutor": "4406ec28-30bb-468f-95d4-4c57c0219aea"
+        }
+      ],
+      "executorAssignments": {
+        "4406ec28-30bb-468f-95d4-4c57c0219aea": [
+          "75fc08d6-6fa9-49bc-9faf-321373203555",
+          "0113b3a5-3009-482a-ac40-68d4fd51ed3f",
+          "45286875-5403-4f32-a7cd-01fadf495aa4",
+          "cdcf5589-ef74-45b6-8776-df4b0a3c1fef",
+          "81bc1f6b-8ba3-46a1-b463-0861eafa3b11",
+          "d77c54db-60de-4850-8d51-709307c75458",
+          "db0375e5-82c3-41e0-9a72-724c301af706"
+        ]
+      },
+      "status": "in_progress",
+      "createdAt": "2025-09-18T11:19:23.750Z",
+      "updatedAt": "2025-09-18T11:19:37.821Z"
     },
     {
       "id": "713605e3-b981-4ee7-98d6-deed24b3b32a",
@@ -251,83 +362,6 @@
       "status": "draft",
       "createdAt": "2025-09-18T09:41:13.053Z",
       "updatedAt": "2025-09-18T09:41:13.053Z"
-    },
-    {
-      "id": "516e1edd-9a03-4f87-94b9-1b7a9f47f305",
-      "taskId": "1cd2f1b2-1130-47d2-b8ed-88b7268c49e9",
-      "plannerId": "b1b05f2c-7a01-41fe-a9b2-13e7b22546ac",
-      "steps": [
-        {
-          "id": "75fc08d6-6fa9-49bc-9faf-321373203555",
-          "description": "Create calculator.py file",
-          "dependencies": [],
-          "status": "in_progress",
-          "order": 1,
-          "assignedExecutor": "4406ec28-30bb-468f-95d4-4c57c0219aea"
-        },
-        {
-          "id": "0113b3a5-3009-482a-ac40-68d4fd51ed3f",
-          "description": "Implement add function",
-          "dependencies": [],
-          "status": "in_progress",
-          "order": 2,
-          "assignedExecutor": "4406ec28-30bb-468f-95d4-4c57c0219aea"
-        },
-        {
-          "id": "45286875-5403-4f32-a7cd-01fadf495aa4",
-          "description": "Implement subtract function",
-          "dependencies": [],
-          "status": "in_progress",
-          "order": 3,
-          "assignedExecutor": "4406ec28-30bb-468f-95d4-4c57c0219aea"
-        },
-        {
-          "id": "cdcf5589-ef74-45b6-8776-df4b0a3c1fef",
-          "description": "Implement multiply function",
-          "dependencies": [],
-          "status": "in_progress",
-          "order": 4,
-          "assignedExecutor": "4406ec28-30bb-468f-95d4-4c57c0219aea"
-        },
-        {
-          "id": "81bc1f6b-8ba3-46a1-b463-0861eafa3b11",
-          "description": "Implement divide function",
-          "dependencies": [],
-          "status": "in_progress",
-          "order": 5,
-          "assignedExecutor": "4406ec28-30bb-468f-95d4-4c57c0219aea"
-        },
-        {
-          "id": "d77c54db-60de-4850-8d51-709307c75458",
-          "description": "Create main function with test cases",
-          "dependencies": [],
-          "status": "in_progress",
-          "order": 6,
-          "assignedExecutor": "4406ec28-30bb-468f-95d4-4c57c0219aea"
-        },
-        {
-          "id": "db0375e5-82c3-41e0-9a72-724c301af706",
-          "description": "Run and test the calculator",
-          "dependencies": [],
-          "status": "in_progress",
-          "order": 7,
-          "assignedExecutor": "4406ec28-30bb-468f-95d4-4c57c0219aea"
-        }
-      ],
-      "executorAssignments": {
-        "4406ec28-30bb-468f-95d4-4c57c0219aea": [
-          "75fc08d6-6fa9-49bc-9faf-321373203555",
-          "0113b3a5-3009-482a-ac40-68d4fd51ed3f",
-          "45286875-5403-4f32-a7cd-01fadf495aa4",
-          "cdcf5589-ef74-45b6-8776-df4b0a3c1fef",
-          "81bc1f6b-8ba3-46a1-b463-0861eafa3b11",
-          "d77c54db-60de-4850-8d51-709307c75458",
-          "db0375e5-82c3-41e0-9a72-724c301af706"
-        ]
-      },
-      "status": "in_progress",
-      "createdAt": "2025-09-18T11:19:23.750Z",
-      "updatedAt": "2025-09-18T11:19:37.821Z"
     }
   ],
   "reports": [
@@ -396,5 +430,5 @@
       "timestamp": "2025-09-18T10:02:13.051Z"
     }
   ],
-  "lastUpdated": "2025-09-18T11:19:37.823Z"
+  "lastUpdated": "2025-09-18T15:32:53.957Z"
 }

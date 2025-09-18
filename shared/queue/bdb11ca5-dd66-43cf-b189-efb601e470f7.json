@@ -1,0 +1,10 @@
+{
+  "id": "bdb11ca5-dd66-43cf-b189-efb601e470f7",
+  "type": "message",
+  "from": "codex-default",
+  "to": "codex-default",
+  "content": "YENİ TEST MESAJI: Script bu mesajı algılayıp otomatik check_messages yazmalı! Saat: 18:35",
+  "timestamp": "2025-09-18T15:40:30.944Z",
+  "read": true,
+  "priority": "urgent"
+}
